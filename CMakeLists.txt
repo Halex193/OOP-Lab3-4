@@ -14,5 +14,20 @@ add_executable(Lab3_4
         sources/model.c
         headers/model.h
         sources/vector.c
+        headers/vector.h)
+add_executable(Lab3_4-Tests
+        tests/main.c
+        sources/ui.c
+        headers/ui.h
+        sources/controller.c
+        headers/controller.h
+        sources/repository.c
+        headers/repository.h
+        sources/model.c
+        headers/model.h
+        sources/vector.c
         headers/vector.h
-        )
+        tests/controllerTest.c
+        tests/controllerTest.h
+        tests/repositoryTest.c
+        tests/repositoryTest.h)

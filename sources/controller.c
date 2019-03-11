@@ -29,14 +29,14 @@ ControllerAdd(VECTOR *vector, char destination[100], int day, int month, int yea
     return "Offer was added\n";
 }
 
-char *ControllerList(VECTOR *vector, char *name)
+char *ControllerList(VECTOR *vector, char *searchString)
 {
     char *output = (char *) calloc(sizeof(char), 1024);
     for (int i = 0; i < VecGetCount(vector); i++)
     {
         Offer *storedOffer;
         VecGetValueByIndex(vector, i, (void **) &storedOffer);
-        if (name == NULL || strstr(storedOffer->destination, name) != NULL)
+        if (searchString == NULL || strstr(storedOffer->destination, searchString) != NULL)
         {
             char buffer[300];
             char *dateString = DateToString(storedOffer->departureDate);
