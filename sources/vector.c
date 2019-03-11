@@ -42,7 +42,7 @@ int VecDestroy(VECTOR **Vector)
     {
         return -1;
     }
-
+    free((*Vector)->Elements);
     free(*Vector);
     *Vector = NULL;
     return 0;

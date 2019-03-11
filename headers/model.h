@@ -24,4 +24,10 @@ void OfferCreate(Offer **offer, char destination[100], int day, int month, int y
 
 void OfferDestroy(Offer **offer);
 
+int OfferEquals(Offer *offer1, Offer *offer2);
+
+int DateEquals(Date date1, Date date2);
+
+char * DateToString(Date date);
 #endif //LAB3_4_MODEL_H
+
