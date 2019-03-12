@@ -7,12 +7,16 @@
 #include <stdlib.h>
 #include "../headers/ui.h"
 #include "../headers/controller.h"
+#include "../headers/repository.h"
+#include "../headers/model.h"
 
 
-void run(VECTOR *vector)
+void run(Repository repository)
 {
+    ControllerPopulate(repository);
     printf("Happy Holidays!\n");
-    printf("Useful commands: add, remove, update, list\n");
+    printf("Our offers are characterized by destination, date, type and price\n");
+    printf("Available commands: add, remove, update, list\n");
     while (1)
     {
         char command[10];
@@ -32,7 +36,14 @@ void run(VECTOR *vector)
             int price;
             if (sscanf(line, "%s %s %d.%d.%d %s %d", command, destination, &day, &month, &year, type, &price) == 7)
             {
-                printf("%s", ControllerAdd(vector, destination, day, month, year, type, price));
+                if (!OfferTypeValid(type))
+                {
+                    printf("Offer type invalid!\n");
+                }
+                else
+                {
+                    printf("%s", ControllerAdd(repository, destination, day, month, year, type, price));
+                }
             }
             else
                 printf("Unrecognized pattern\n");
@@ -45,7 +56,7 @@ void run(VECTOR *vector)
             int year;
             if (sscanf(line, "%s %s %d.%d.%d", command, destination, &day, &month, &year) == 5)
             {
-                printf("%s", ControllerRemove(vector, destination, day, month, year));
+                printf("%s", ControllerRemove(repository, destination, day, month, year));
             }
             else
                 printf("Unrecognized pattern\n");
@@ -60,7 +71,7 @@ void run(VECTOR *vector)
             int price;
             if (sscanf(line, "%s %s %d.%d.%d %s %d", command, destination, &day, &month, &year, type, &price) == 7)
             {
-                printf("%s", ControllerUpdate(vector, destination, day, month, year, type, price));
+                printf("%s", ControllerUpdate(repository, destination, day, month, year, type, price));
             }
             else
                 printf("Unrecognized pattern\n");
@@ -68,18 +79,32 @@ void run(VECTOR *vector)
         else if (strcmp(command, "list") == 0)
         {
             char name[100];
+            VECTOR *temporaryList;
             if (sscanf(line, "%s %s", command, name) == 2 && strcmp(name, "\0") != 0)
             {
-                char *output = ControllerList(vector, name);
-                printf("%s", output);
-                free(output);
+                temporaryList = ControllerList(repository, name);
             }
             else
             {
-                char *output = ControllerList(vector, NULL);
-                printf("%s", output);
-                free(output);
+                temporaryList = ControllerList(repository, NULL);
             }
+            unsigned int listSize = (unsigned int) VecGetCount(temporaryList);
+            char *output = (char *) calloc(sizeof(char), listSize * 1024);
+            for (int i = 0; i < listSize; i++)
+            {
+                Offer *listOffer;
+                VecGetValueByIndex(temporaryList, i, (void **) &listOffer);
+                char buffer[300];
+                char *dateString = DateToString(listOffer->departureDate);
+                sprintf(buffer, "%s - %s - %s - %d", listOffer->destination,
+                        dateString, listOffer->type, listOffer->price);
+                free(dateString);
+                strcat(output, buffer);
+                strcat(output, "\n");
+            }
+            VecDestroy(&temporaryList);
+            printf("%s", output);
+            free(output);
         }
         else
         {

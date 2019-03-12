@@ -13,8 +13,8 @@
 int main()
 {
     setbuf(stdout, 0);
-    VECTOR *vector = RepoCreate();
-    run(vector);
-    RepoDestroy(vector);
+    Repository repository = RepoCreate();
+    run(repository);
+    RepoDestroy(repository);
     return 0;
 }

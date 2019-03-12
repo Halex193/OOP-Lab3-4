@@ -16,7 +16,7 @@ int VecCreate(VECTOR **Vector)
     {
         return -1;
     }
-    VECTOR *newVector = malloc(sizeof(VECTOR));
+    VECTOR *newVector = (VECTOR *) malloc(sizeof(VECTOR));
     if (newVector == NULL)
     {
         *Vector = NULL;
@@ -25,7 +25,7 @@ int VecCreate(VECTOR **Vector)
 
     newVector->AllocatedSize = DEFAULT_VECTOR_SIZE;
     newVector->Size = 0;
-    TElem *elements = malloc(sizeof(TElem) * DEFAULT_VECTOR_SIZE);
+    TElem *elements = (TElem *) malloc(sizeof(TElem) * DEFAULT_VECTOR_SIZE);
     if (elements == NULL)
     {
         *Vector = NULL;
@@ -191,7 +191,7 @@ int VecClear(VECTOR *Vector)
     return 0;
 }
 
-int VecSort(VECTOR *Vector)
+int VecSort(VECTOR *Vector, int (*compare)(TElem elem1, TElem elem2))
 {
     if (Vector == NULL)
     {
@@ -203,7 +203,7 @@ int VecSort(VECTOR *Vector)
     {
         for (int j = i + 1; j < size; j++)
         {
-            if (elements[i] > elements[j])
+            if (compare(elements[i], elements[j]) > 1)
             {
                 TElem temp = elements[i];
                 elements[i] = elements[j];

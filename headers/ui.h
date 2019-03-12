@@ -6,7 +6,8 @@
 #define LAB3_4_UI_H
 
 #include "vector.h"
+#include "repository.h"
 
-void run(VECTOR *vector);
+void run(Repository repository);
 
 #endif //LAB3_4_UI_H

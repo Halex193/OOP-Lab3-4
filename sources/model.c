@@ -44,3 +44,10 @@ char *DateToString(Date date)
     sprintf(dateString, "%d.%d.%d", date.day, date.month, date.year);
     return dateString;
 }
+
+int OfferTypeValid(char *type)
+{
+    return strcmp(type, "seaside") == 0 ||
+           strcmp(type, "mountain") == 0 ||
+           strcmp(type, "city break") == 0;
+}

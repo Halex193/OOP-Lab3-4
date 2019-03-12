@@ -5,20 +5,21 @@
 #include "../headers/repository.h"
 #include "../headers/model.h"
 
-VECTOR *RepoCreate()
+Repository RepoCreate()
 {
-    VECTOR *vector;
-    VecCreate(&vector);
-    return vector;
+    Repository repository;
+    VecCreate(&repository.offers);
+    return repository;
 }
 
-void RepoDestroy(VECTOR *vector)
+void RepoDestroy(Repository repository)
 {
-    for (int i = 0; i < VecGetCount(vector); i++)
+    VECTOR *offers = repository.offers;
+    for (int i = 0; i < VecGetCount(offers); i++)
     {
         Offer *offer;
-        VecGetValueByIndex(vector, i, (void **) &offer);
+        VecGetValueByIndex(offers, i, (void **) &offer);
         OfferDestroy(&offer);
     }
-    VecDestroy(&vector);
+    VecDestroy(&offers);
 }

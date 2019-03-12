@@ -6,6 +6,7 @@
 #define LAB3_4_CONTROLLER_H
 
 #include "vector.h"
+#include "repository.h"
 
 /**
  * Adds an offer to the repository
@@ -19,12 +20,12 @@
  * @return A message for the user indicating the result of the operation
  */
 const char *
-ControllerAdd(VECTOR *vector, char destination[100], int day, int month, int year, char type[20],
+ControllerAdd(Repository vector, char *destination, int day, int month, int year, char *type,
               int price);
 
 /**
  * Updates an offer of the repository
- * @param vector The vector that contains the stored offers
+ * @param repository The repository that contains the stored offers
  * @param destination The destination of the trip
  * @param day The day of the trip
  * @param month The month of the trip
@@ -34,12 +35,12 @@ ControllerAdd(VECTOR *vector, char destination[100], int day, int month, int yea
  * @return A message for the user indicating the result of the operation
  */
 const char *
-ControllerUpdate(VECTOR *vector, char destination[100], int day, int month, int year, char type[20],
+ControllerUpdate(Repository repository, char destination[100], int day, int month, int year, char type[20],
                  int price);
 
 /**
  * Removed an offer of the repository
- * @param vector The vector that contains the stored offers
+ * @param repository The repository that contains the stored offers
  * @param destination The destination of the trip
  * @param day The day of the trip
  * @param month The month of the trip
@@ -47,14 +48,20 @@ ControllerUpdate(VECTOR *vector, char destination[100], int day, int month, int 
  * @return A message for the user indicating the result of the operation
  */
 const char *
-ControllerRemove(VECTOR *vector, char destination[100], int day, int month, int year);
+ControllerRemove(Repository repository, char destination[100], int day, int month, int year);
 
 /**
- * Lists the filetered offers of the repository
+ * Lists the filtered offers of the repository
  * @param searchString The string to be found in the destination. If the parameter is NULL, no filtering is applied
  * @return A message for the user indicating the result of the operation (the memory needs to be freed afterwards)
  */
-char *ControllerList(VECTOR *vector, char searchString[100]);
+VECTOR *ControllerList(Repository repository, char searchString[100]);
+
+/**
+ * Populates the repository with default data
+ * @param repository The repository that contains the stored offers
+ */
+void ControllerPopulate(Repository repository);
 
 #endif //LAB3_4_CONTROLLER_H
 
