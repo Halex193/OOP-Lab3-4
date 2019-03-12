@@ -71,7 +71,14 @@ void run(Repository repository)
             int price;
             if (sscanf(line, "%s %s %d.%d.%d %s %d", command, destination, &day, &month, &year, type, &price) == 7)
             {
-                printf("%s", ControllerUpdate(repository, destination, day, month, year, type, price));
+                if (!OfferTypeValid(type))
+                {
+                    printf("Offer type invalid!\n");
+                }
+                else
+                {
+                    printf("%s", ControllerUpdate(repository, destination, day, month, year, type, price));
+                }
             }
             else
                 printf("Unrecognized pattern\n");
