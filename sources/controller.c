@@ -9,6 +9,8 @@
 #include "../headers/controller.h"
 #include "../headers/model.h"
 
+VECTOR *ControllerFilter(VECTOR *offers, void *parameter, int (*valid)(Offer *offer, void *parameter));
+
 const char *
 ControllerAdd(Repository repository, char *destination, int day, int month, int year, char *type,
               int price)
@@ -133,21 +135,34 @@ VECTOR *ControllerBonus(Repository repository, char *destination)
     VecSort(temporaryList, &sortByMonth);
     return temporaryList;
 }
-
+int sameType(Offer *offer, void *year)
+{
+    return offer->departureDate.year == *((int*)year);
+}
 VECTOR *ControllerListYear(Repository repository, int year)
 {
-    VECTOR *offers = repository.offers;
+    VECTOR *temporaryList = ControllerFilter(repository.offers, &year, &sameType);
+    VecSort(temporaryList, &sortByPrice);
+    return temporaryList;
+}
+
+VECTOR *ControllerFilter(VECTOR *offers, void *parameter, int (*valid)(Offer *offer, void *parameter))
+{
     VECTOR *temporaryList;
     VecCreate(&temporaryList);
     for (int i = 0; i < VecGetCount(offers); i++)
     {
         Offer *storedOffer;
         VecGetValueByIndex(offers, i, (void **) &storedOffer);
-        if (storedOffer->departureDate.year == year)
+        if (valid(storedOffer, parameter))
         {
             VecInsertTail(temporaryList, storedOffer);
         }
     }
-    VecSort(temporaryList, &sortByPrice);
     return temporaryList;
+}
+
+VECTOR *ControllerListType(Repository repository, char *type, Date date)
+{
+    return NULL;
 }

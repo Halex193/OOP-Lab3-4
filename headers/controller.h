@@ -7,6 +7,7 @@
 
 #include "vector.h"
 #include "repository.h"
+#include "model.h"
 
 /**
  * Adds an offer to the repository
@@ -69,5 +70,7 @@ void ControllerPopulate(Repository repository);
  * Function for the in-lab activity
  */
 VECTOR *ControllerBonus(Repository repository, char* destination);
+
+VECTOR *ControllerListType(Repository repository, char type[20], Date date)
 #endif //LAB3_4_CONTROLLER_H
 

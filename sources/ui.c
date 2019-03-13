@@ -10,9 +10,6 @@
 #include "../headers/repository.h"
 #include "../headers/model.h"
 
-
-void listOffers(VECTOR **offers);
-
 void run(Repository repository)
 {
     ControllerPopulate(repository);
@@ -117,6 +114,24 @@ void run(Repository repository)
                 printf("Unrecognized pattern\n");
             }
 
+        }
+        else if (strcmp(command, "type") == 0)
+        {
+            Date date;
+            char type[20];
+            if (sscanf(line, "%s %s %d.%d.%d", command, type, &date.day, &date.month, &date.year) == 5)
+            {
+                if (!OfferTypeValid(type))
+                {
+                    printf("Offer type invalid!\n");
+                }
+                VECTOR *offerList = ControllerListType(repository, type, date);
+                listOffers(&offerList);
+            }
+            else
+            {
+                printf("Unrecognized pattern\n");
+            }
         }
         else
         {
