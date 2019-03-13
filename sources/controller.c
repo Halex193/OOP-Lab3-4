@@ -110,3 +110,44 @@ void ControllerPopulate(Repository repository)
     ControllerAdd(repository, "Canada", 15, 2, 2016, "city break", 10000);
     ControllerAdd(repository, "Kenya", 12, 12, 2013, "seaside", 22000);
 }
+
+int sortByMonth(void *offer1, void *offer2)
+{
+    return ((Offer *) offer1)->departureDate.month - ((Offer *) offer2)->departureDate.month;
+}
+
+VECTOR *ControllerBonus(Repository repository, char *destination)
+{
+    VECTOR *offers = repository.offers;
+    VECTOR *temporaryList;
+    VecCreate(&temporaryList);
+    for (int i = 0; i < VecGetCount(offers); i++)
+    {
+        Offer *storedOffer;
+        VecGetValueByIndex(offers, i, (void **) &storedOffer);
+        if (strcmp(storedOffer->destination, destination) == 0)
+        {
+            VecInsertTail(temporaryList, storedOffer);
+        }
+    }
+    VecSort(temporaryList, &sortByMonth);
+    return temporaryList;
+}
+
+VECTOR *ControllerListYear(Repository repository, int year)
+{
+    VECTOR *offers = repository.offers;
+    VECTOR *temporaryList;
+    VecCreate(&temporaryList);
+    for (int i = 0; i < VecGetCount(offers); i++)
+    {
+        Offer *storedOffer;
+        VecGetValueByIndex(offers, i, (void **) &storedOffer);
+        if (storedOffer->departureDate.year == year)
+        {
+            VecInsertTail(temporaryList, storedOffer);
+        }
+    }
+    VecSort(temporaryList, &sortByPrice);
+    return temporaryList;
+}

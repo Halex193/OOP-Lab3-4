@@ -11,12 +11,14 @@
 #include "../headers/model.h"
 
 
+void listOffers(VECTOR **offers);
+
 void run(Repository repository)
 {
     ControllerPopulate(repository);
     printf("Happy Holidays!\n");
     printf("Our offers are characterized by destination, date, type and price\n");
-    printf("Available commands: add, remove, update, list\n");
+    printf("Available commands: add, remove, update, list, type\n");
     while (1)
     {
         char command[10];
@@ -86,32 +88,35 @@ void run(Repository repository)
         else if (strcmp(command, "list") == 0)
         {
             char name[100];
-            VECTOR *temporaryList;
-            if (sscanf(line, "%s %s", command, name) == 2 && strcmp(name, "\0") != 0)
+            int year;
+            VECTOR *offerList;
+            if (sscanf(line, "%s %d", command, &year) == 2)
             {
-                temporaryList = ControllerList(repository, name);
+                offerList = ControllerListYear(repository, year);
+            }
+            else if (sscanf(line, "%s %s", command, name) == 2 && strcmp(name, "\0") != 0)
+            {
+                offerList = ControllerList(repository, name);
             }
             else
             {
-                temporaryList = ControllerList(repository, NULL);
+                offerList = ControllerList(repository, NULL);
             }
-            unsigned int listSize = (unsigned int) VecGetCount(temporaryList);
-            char *output = (char *) calloc(sizeof(char), listSize * 1024);
-            for (int i = 0; i < listSize; i++)
+            listOffers(&offerList);
+        }
+        else if (strcmp(command, "bonus") == 0)
+        {
+            char destination[100];
+            if (sscanf(line, "%s %s", command, destination) == 2 && strcmp(destination, "\0") != 0)
             {
-                Offer *listOffer;
-                VecGetValueByIndex(temporaryList, i, (void **) &listOffer);
-                char buffer[300];
-                char *dateString = DateToString(listOffer->departureDate);
-                sprintf(buffer, "%s - %s - %s - %d", listOffer->destination,
-                        dateString, listOffer->type, listOffer->price);
-                free(dateString);
-                strcat(output, buffer);
-                strcat(output, "\n");
+                VECTOR *offerList = ControllerBonus(repository, destination);
+                listOffers(&offerList);
             }
-            VecDestroy(&temporaryList);
-            printf("%s", output);
-            free(output);
+            else
+            {
+                printf("Unrecognized pattern\n");
+            }
+
         }
         else
         {
@@ -119,4 +124,31 @@ void run(Repository repository)
         }
 
     }
+}
+
+void listOffers(VECTOR **offers)
+{
+    unsigned int listSize = (unsigned int) VecGetCount((*offers));
+    if (listSize == 0)
+    {
+        printf("Nothing to display\n");
+        VecDestroy(offers);
+        return;
+    }
+    char *output = (char *) calloc(sizeof(char), listSize * 1024);
+    for (int i = 0; i < listSize; i++)
+    {
+        Offer *listOffer;
+        VecGetValueByIndex((*offers), i, (void **) &listOffer);
+        char buffer[300];
+        char *dateString = DateToString(listOffer->departureDate);
+        sprintf(buffer, "%s - %s - %s - %d", listOffer->destination,
+                dateString, listOffer->type, listOffer->price);
+        free(dateString);
+        strcat(output, buffer);
+        strcat(output, "\n");
+    }
+    VecDestroy(offers);
+    printf("%s", output);
+    free(output);
 }

@@ -57,11 +57,17 @@ ControllerRemove(Repository repository, char destination[100], int day, int mont
  */
 VECTOR *ControllerList(Repository repository, char searchString[100]);
 
+VECTOR *ControllerListYear(Repository repository, int year);
+
 /**
  * Populates the repository with default data
  * @param repository The repository that contains the stored offers
  */
 void ControllerPopulate(Repository repository);
 
+/**
+ * Function for the in-lab activity
+ */
+VECTOR *ControllerBonus(Repository repository, char* destination);
 #endif //LAB3_4_CONTROLLER_H
 
