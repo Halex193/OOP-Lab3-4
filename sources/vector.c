@@ -203,7 +203,7 @@ int VecSort(VECTOR *Vector, int (*compare)(TElem elem1, TElem elem2))
     {
         for (int j = i + 1; j < size; j++)
         {
-            if (compare(elements[i], elements[j]) > 1)
+            if (compare(elements[i], elements[j]) > 0)
             {
                 TElem temp = elements[i];
                 elements[i] = elements[j];

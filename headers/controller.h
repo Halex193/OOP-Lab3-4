@@ -71,6 +71,6 @@ void ControllerPopulate(Repository repository);
  */
 VECTOR *ControllerBonus(Repository repository, char* destination);
 
-VECTOR *ControllerListType(Repository repository, char type[20], Date date)
+VECTOR *ControllerListType(Repository repository, char type[20], Date date, int order);
 #endif //LAB3_4_CONTROLLER_H
 

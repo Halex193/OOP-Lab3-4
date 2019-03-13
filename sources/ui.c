@@ -10,6 +10,8 @@
 #include "../headers/repository.h"
 #include "../headers/model.h"
 
+void listOffers(VECTOR **offers);
+
 void run(Repository repository)
 {
     ControllerPopulate(repository);
@@ -119,14 +121,34 @@ void run(Repository repository)
         {
             Date date;
             char type[20];
-            if (sscanf(line, "%s %s %d.%d.%d", command, type, &date.day, &date.month, &date.year) == 5)
+            char order[11];
+            if (sscanf(line, "%s %s %d.%d.%d %s", command, type, &date.day, &date.month, &date.year, order) == 6)
             {
                 if (!OfferTypeValid(type))
                 {
                     printf("Offer type invalid!\n");
                 }
-                VECTOR *offerList = ControllerListType(repository, type, date);
-                listOffers(&offerList);
+                else
+                {
+                    int orderInt = -1;
+                    if (strcmp(order, "asc") == 0 || strcmp(order, "ascending") == 0)
+                    {
+                        orderInt = 1;
+                    }
+                    else if (strcmp(order, "desc") == 0 || strcmp(order, "descending") == 0)
+                    {
+                        orderInt = 0;
+                    }
+                    else
+                    {
+                        printf("Invalid ordering type!\n");
+                    }
+                    if (orderInt != -1)
+                    {
+                        VECTOR *offerList = ControllerListType(repository, type, date, orderInt);
+                        listOffers(&offerList);
+                    }
+                }
             }
             else
             {

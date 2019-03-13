@@ -7,7 +7,6 @@
 
 #include "vector.h"
 #include "repository.h"
-void listOffers(VECTOR **offers);
 
 void run(Repository repository);
 

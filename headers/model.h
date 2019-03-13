@@ -57,5 +57,7 @@ int DateEquals(Date date1, Date date2);
 char * DateToString(Date date);
 
 int OfferTypeValid(char *type);
+
+int DateGreater(Date date1, Date date2);
 #endif //LAB3_4_MODEL_H
 

@@ -49,5 +49,30 @@ int OfferTypeValid(char *type)
 {
     return strcmp(type, "seaside") == 0 ||
            strcmp(type, "mountain") == 0 ||
-           strcmp(type, "city break") == 0;
+           strcmp(type, "city-break") == 0;
+}
+
+int DateGreater(Date date1, Date date2)
+{
+    if (date1.year > date2.year)
+    {
+        return 1;
+    }
+    if (date1.year == date2.year)
+    {
+        if (date1.month > date2.month)
+        {
+            return 1;
+        }
+        if (date1.month == date2.month)
+        {
+            if (date1.day >= date2.day)
+            {
+                return 1;
+            }
+            return 0;
+        }
+        return 0;
+    }
+    return 0;
 }
