@@ -44,6 +44,8 @@ void OfferDestroy(Offer **offer);
  */
 int OfferEquals(Offer *offer1, Offer *offer2);
 
+Offer* OfferCopy(Offer *offer);
+
 /**
  * Checks the equality of two date structs
  * @return 1 if the offers are equal, otherwise 0

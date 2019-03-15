@@ -12,10 +12,10 @@
 VECTOR *ControllerFilter(VECTOR *offers, void *parameter, int (*valid)(Offer *offer, void *parameter));
 
 const char *
-ControllerAdd(Repository repository, char *destination, int day, int month, int year, char *type,
+ControllerAdd(Repository * repository, char *destination, int day, int month, int year, char *type,
               int price)
 {
-    VECTOR *offers = repository.offers;
+    VECTOR *offers = repository->offers;
     Offer *offer;
     OfferCreate(&offer, destination, day, month, year, type, price);
     for (int i = 0; i < VecGetCount(offers); i++)
@@ -29,6 +29,7 @@ ControllerAdd(Repository repository, char *destination, int day, int month, int 
         }
     }
     VecInsertTail(offers, offer);
+    RepositoryOfferAdded(repository, offer);
     return "Offer was added\n";
 }
 
@@ -42,18 +43,18 @@ int searchDestination(Offer *offer, void *searchString)
     return searchString == NULL || strstr(offer->destination, (char *) searchString) != NULL;
 }
 
-VECTOR *ControllerList(Repository repository, char *searchString)
+VECTOR *ControllerList(Repository *repository, char *searchString)
 {
-    VECTOR *temporaryList = ControllerFilter(repository.offers, searchString, &searchDestination);
+    VECTOR *temporaryList = ControllerFilter(repository->offers, searchString, &searchDestination);
     VecSort(temporaryList, &sortByPrice);
     return temporaryList;
 }
 
 const char *
-ControllerUpdate(Repository repository, char *destination, int day, int month, int year, char *type,
+ControllerUpdate(Repository *repository, char *destination, int day, int month, int year, char *type,
                  int price)
 {
-    VECTOR *offers = repository.offers;
+    VECTOR *offers = repository->offers;
     Offer *offer;
     OfferCreate(&offer, destination, day, month, year, type, price);
     for (int i = 0; i < VecGetCount(offers); i++)
@@ -63,8 +64,9 @@ ControllerUpdate(Repository repository, char *destination, int day, int month, i
         if (OfferEquals(offer, storedOffer))
         {
             VecRemoveByIndex(offers, i);
-            OfferDestroy(&storedOffer);
             VecInsertTail(offers, offer);
+            RepositoryOfferUpdated(repository, storedOffer, offer);
+            OfferDestroy(&storedOffer);
             return "Offer updated!\n";
         }
     }
@@ -72,9 +74,9 @@ ControllerUpdate(Repository repository, char *destination, int day, int month, i
     return "Offer was not found\n";
 }
 
-const char *ControllerRemove(Repository repository, char *destination, int day, int month, int year)
+const char *ControllerRemove(Repository *repository, char *destination, int day, int month, int year)
 {
-    VECTOR *offers = repository.offers;
+    VECTOR *offers = repository->offers;
     Offer *offer;
     OfferCreate(&offer, destination, day, month, year, "", 0);
     for (int i = 0; i < VecGetCount(offers); i++)
@@ -84,6 +86,7 @@ const char *ControllerRemove(Repository repository, char *destination, int day, 
         if (OfferEquals(offer, storedOffer))
         {
             VecRemoveByIndex(offers, i);
+            RepositoryOfferRemoved(repository, storedOffer);
             OfferDestroy(&storedOffer);
             OfferDestroy(&offer);
             return "Offer removed!\n";
@@ -93,7 +96,7 @@ const char *ControllerRemove(Repository repository, char *destination, int day, 
     return "Offer was not found\n";
 }
 
-void ControllerPopulate(Repository repository)
+void ControllerPopulate(Repository *repository)
 {
     ControllerAdd(repository, "Romania", 12, 12, 2015, "seaside", 16000);
     ControllerAdd(repository, "Chad", 11, 12, 2016, "mountain", 1200);
@@ -105,6 +108,7 @@ void ControllerPopulate(Repository repository)
     ControllerAdd(repository, "USA", 23, 5, 2015, "city-break", 11000);
     ControllerAdd(repository, "Canada", 15, 2, 2016, "city-break", 10000);
     ControllerAdd(repository, "Kenya", 12, 12, 2013, "seaside", 22000);
+    RepositoryClearHistory(repository);
 }
 
 int sameDestination(Offer *storedOffer, void *destination)
@@ -117,9 +121,9 @@ int sortByMonth(void *offer1, void *offer2)
     return ((Offer *) offer1)->departureDate.month - ((Offer *) offer2)->departureDate.month;
 }
 
-VECTOR *ControllerBonus(Repository repository, char *destination)
+VECTOR *ControllerBonus(Repository *repository, char *destination)
 {
-    VECTOR *temporaryList = ControllerFilter(repository.offers, destination, &sameDestination);
+    VECTOR *temporaryList = ControllerFilter(repository->offers, destination, &sameDestination);
     VecSort(temporaryList, &sortByMonth);
     return temporaryList;
 }
@@ -129,9 +133,9 @@ int sameType(Offer *offer, void *year)
     return offer->departureDate.year == *((int *) year);
 }
 
-VECTOR *ControllerListYear(Repository repository, int year)
+VECTOR *ControllerListYear(Repository *repository, int year)
 {
-    VECTOR *temporaryList = ControllerFilter(repository.offers, &year, &sameType);
+    VECTOR *temporaryList = ControllerFilter(repository->offers, &year, &sameType);
     VecSort(temporaryList, &sortByPrice);
     return temporaryList;
 }
@@ -162,9 +166,9 @@ int sortByDateDesc(void *offer1, void *offer2)
     return DateGreater(((Offer *) offer1)->departureDate, ((Offer *) offer2)->departureDate) ? -1 : 1;
 }
 
-VECTOR *ControllerListType(Repository repository, char *type, Date date, int order)
+VECTOR *ControllerListType(Repository *repository, char *type, Date date, int order)
 {
-    VECTOR *offers = repository.offers;
+    VECTOR *offers = repository->offers;
     VECTOR *temporaryList;
     VecCreate(&temporaryList);
     for (int i = 0; i < VecGetCount(offers); i++)
@@ -186,3 +190,22 @@ VECTOR *ControllerListType(Repository repository, char *type, Date date, int ord
     }
     return temporaryList;
 }
+
+char *ControllerRedo(Repository *repository)
+{
+    if (RepositoryRedo(repository))
+    {
+        return "The last operation was redone!\n";
+    }
+    return "There are no more operations to redo\n";
+}
+
+char *ControllerUndo(Repository *repository)
+{
+    if (RepositoryUndo(repository))
+    {
+        return "The last operation was undone!\n";
+    }
+    return "There are no more operations to undo\n";
+}
+

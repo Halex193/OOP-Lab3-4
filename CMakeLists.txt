@@ -3,31 +3,17 @@ project(Lab3_4 C)
 
 set(CMAKE_C_STANDARD 99)
 
+file(GLOB hearderFiles "headers/*.h")
+file(GLOB sourceFiles "sources/*.c")
+file(GLOB testFiles "tests/*")
+
 add_executable(Lab3_4
         main.c
-        sources/ui.c
-        headers/ui.h
-        sources/controller.c
-        headers/controller.h
-        sources/repository.c
-        headers/repository.h
-        sources/model.c
-        headers/model.h
-        sources/vector.c
-        headers/vector.h)
+        ${headerFiles}
+        ${sourceFiles}
+        )
 add_executable(Lab3_4-Tests
-        tests/main.c
-        sources/ui.c
-        headers/ui.h
-        sources/controller.c
-        headers/controller.h
-        sources/repository.c
-        headers/repository.h
-        sources/model.c
-        headers/model.h
-        sources/vector.c
-        headers/vector.h
-        tests/controllerTest.c
-        tests/controllerTest.h
-        tests/repositoryTest.c
-        tests/repositoryTest.h)
+        ${testFiles}
+        ${headerFiles}
+        ${sourceFiles}
+        )

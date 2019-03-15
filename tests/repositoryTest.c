@@ -103,7 +103,7 @@ int TestVector()
 void testRepository()
 {
     TestVector();
-    Repository repository = RepoCreate();
+    Repository *repository = RepoCreate();
     VECTOR *offers = repository.offers;
     assert(VecGetCount(offers) == 0);
 

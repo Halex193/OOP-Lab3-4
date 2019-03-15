@@ -21,7 +21,7 @@
  * @return A message for the user indicating the result of the operation
  */
 const char *
-ControllerAdd(Repository vector, char *destination, int day, int month, int year, char *type,
+ControllerAdd(Repository *vector, char *destination, int day, int month, int year, char *type,
               int price);
 
 /**
@@ -36,7 +36,7 @@ ControllerAdd(Repository vector, char *destination, int day, int month, int year
  * @return A message for the user indicating the result of the operation
  */
 const char *
-ControllerUpdate(Repository repository, char destination[100], int day, int month, int year, char type[20],
+ControllerUpdate(Repository *repository, char destination[100], int day, int month, int year, char type[20],
                  int price);
 
 /**
@@ -49,28 +49,34 @@ ControllerUpdate(Repository repository, char destination[100], int day, int mont
  * @return A message for the user indicating the result of the operation
  */
 const char *
-ControllerRemove(Repository repository, char destination[100], int day, int month, int year);
+ControllerRemove(Repository *repository, char destination[100], int day, int month, int year);
 
 /**
  * Lists the filtered offers of the repository
  * @param searchString The string to be found in the destination. If the parameter is NULL, no filtering is applied
  * @return A message for the user indicating the result of the operation (the memory needs to be freed afterwards)
  */
-VECTOR *ControllerList(Repository repository, char searchString[100]);
+VECTOR *ControllerList(Repository *repository, char searchString[100]);
 
-VECTOR *ControllerListYear(Repository repository, int year);
+VECTOR *ControllerListYear(Repository *repository, int year);
 
 /**
  * Populates the repository with default data
  * @param repository The repository that contains the stored offers
  */
-void ControllerPopulate(Repository repository);
+void ControllerPopulate(Repository *repository);
 
 /**
  * Function for the in-lab activity
  */
-VECTOR *ControllerBonus(Repository repository, char* destination);
+VECTOR *ControllerBonus(Repository *repository, char *destination);
 
-VECTOR *ControllerListType(Repository repository, char type[20], Date date, int order);
+VECTOR *ControllerListType(Repository *repository, char type[20], Date date, int order);
+
+
+char *ControllerUndo(Repository *repository);
+
+char *ControllerRedo(Repository *repository);
+
 #endif //LAB3_4_CONTROLLER_H
 

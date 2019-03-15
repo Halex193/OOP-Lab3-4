@@ -12,12 +12,12 @@
 
 void listOffers(VECTOR **offers);
 
-void run(Repository repository)
+void run(Repository * repository)
 {
     ControllerPopulate(repository);
     printf("Happy Holidays!\n");
     printf("Our offers are characterized by destination, date, type and price\n");
-    printf("Available commands: add, remove, update, list, type\n");
+    printf("Available commands: add, remove, update, list, type, undo, redo\n");
     while (1)
     {
         char command[10];
@@ -154,6 +154,14 @@ void run(Repository repository)
             {
                 printf("Unrecognized pattern\n");
             }
+        }
+        else if (strcmp(command, "undo") == 0)
+        {
+            printf("%s", ControllerUndo(repository));
+        }
+        else if (strcmp(command, "redo") == 0)
+        {
+            printf("%s", ControllerRedo(repository));
         }
         else
         {

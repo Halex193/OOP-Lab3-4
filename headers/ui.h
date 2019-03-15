@@ -8,6 +8,6 @@
 #include "vector.h"
 #include "repository.h"
 
-void run(Repository repository);
+void run(Repository * repository);
 
 #endif //LAB3_4_UI_H

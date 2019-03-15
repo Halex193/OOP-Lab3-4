@@ -25,6 +25,14 @@ void OfferDestroy(Offer **offer)
     *offer = NULL;
 }
 
+Offer *OfferCopy(Offer *offer)
+{
+    Offer *newOffer;
+    OfferCreate(&newOffer, offer->destination, offer->departureDate.day, offer->departureDate.month,
+                offer->departureDate.year, offer->type, offer->price);
+    return newOffer;
+}
+
 int OfferEquals(Offer *offer1, Offer *offer2)
 {
     return strcmp(offer1->destination, offer2->destination) == 0 &&

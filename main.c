@@ -9,11 +9,14 @@
 #include "headers/ui.h"
 #include "headers/model.h"
 #include "headers/repository.h"
+//0 -> operation based, 1 -> list based
+
+
 
 int main()
 {
     setbuf(stdout, 0);
-    Repository repository = RepoCreate();
+    Repository *repository = RepoCreate();
     run(repository);
     RepoDestroy(repository);
     return 0;

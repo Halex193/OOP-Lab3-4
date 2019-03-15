@@ -13,7 +13,7 @@
 
 void testController()
 {
-    Repository repository = RepoCreate();
+    Repository *repository = RepoCreate();
     VECTOR *offers = repository.offers;
 
     ControllerPopulate(repository);
