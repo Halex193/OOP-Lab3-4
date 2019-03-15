@@ -60,7 +60,7 @@ void testController()
     assert(RepositoryUndo(repository));
     assert(!RepositoryUndo(repository));
 
-
+    VecDestroy(&output);
     RepoDestroy(repository);
     printf("Controller test passed!\n");
 }
