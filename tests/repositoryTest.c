@@ -104,7 +104,7 @@ void testRepository()
 {
     TestVector();
     Repository *repository = RepoCreate();
-    VECTOR *offers = repository.offers;
+    VECTOR *offers = repository->offers;
     assert(VecGetCount(offers) == 0);
 
     Offer* offer;

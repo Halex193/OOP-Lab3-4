@@ -14,7 +14,7 @@
 void testController()
 {
     Repository *repository = RepoCreate();
-    VECTOR *offers = repository.offers;
+    VECTOR *offers = repository->offers;
 
     ControllerPopulate(repository);
     assert(VecGetCount(offers) == 10);
@@ -40,6 +40,27 @@ void testController()
     assert(strcmp(offer->destination, "Chd") == 0);
 
     VecDestroy(&output);
+
+    ControllerUndo(repository);
+    assert(VecGetCount(offers) == 10);
+
+    ControllerUndo(repository);
+    assert(VecGetCount(offers) == 11);
+
+    ControllerRedo(repository);
+    assert(VecGetCount(offers) == 10);
+
+    assert(RepositoryUndo(repository));
+    assert(RepositoryUndo(repository));
+
+    output = ControllerList(repository, "Chd");
+    VecGetValueByIndex(output, 0, (void**)&offer);
+    assert(strcmp(offer->type, "mountain") == 0);
+
+    assert(RepositoryUndo(repository));
+    assert(!RepositoryUndo(repository));
+
+
     RepoDestroy(repository);
     printf("Controller test passed!\n");
 }
