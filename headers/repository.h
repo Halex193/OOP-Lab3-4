@@ -37,20 +37,44 @@ Repository *RepoCreate();
  */
 void RepoDestroy(Repository *repository);
 
+/**
+ * Registers an offer addition to the repository history
+ */
 void RepositoryOfferAdded(Repository *repository, Offer *offer);
 
+/**
+ * Registers an offer deletion to the repository history
+ */
 void RepositoryOfferRemoved(Repository *repository, Offer *offer);
 
+/**
+ * Registers an offer update to the repository history
+ */
 void RepositoryOfferUpdated(Repository *repository, Offer *initialOffer, Offer *newOffer);
 
+/**
+ * Undoes the last operation that modified the repository data
+ */
 int RepositoryUndo(Repository *repository);
 
+/**
+ * Redoes the last operation that modified the repository data
+ */
 int RepositoryRedo(Repository *repository);
 
+/**
+ * Clears the repository history
+ */
 void RepositoryClearHistory(Repository *repository);
 
+/**
+ * Creates an operation struct
+ */
 Operation *OperationCreate(int type, Offer *offer, Offer *initialOffer);
 
+/**
+ * Destroys the operation struct
+ */
 void OperationDestroy(Operation *operation);
 
 #endif //LAB3_4_REPOSITORY_H

@@ -58,6 +58,9 @@ ControllerRemove(Repository *repository, char destination[100], int day, int mon
  */
 VECTOR *ControllerList(Repository *repository, char searchString[100]);
 
+/**
+ * Displays all the offers in the given year
+ */
 VECTOR *ControllerListYear(Repository *repository, int year);
 
 /**
@@ -71,11 +74,20 @@ void ControllerPopulate(Repository *repository);
  */
 VECTOR *ControllerBonus(Repository *repository, char *destination);
 
+/**
+ * Lists all the offers of the given type starting from the given date, sorted according to the order
+ * @param order - 1 -> ascending order, 2 -> descending order
+ */
 VECTOR *ControllerListType(Repository *repository, char type[20], Date date, int order);
 
-
+/**
+ * Undoes the last operation performed
+ */
 char *ControllerUndo(Repository *repository);
 
+/**
+ * Redoes the last operation performed
+ */
 char *ControllerRedo(Repository *repository);
 
 #endif //LAB3_4_CONTROLLER_H
